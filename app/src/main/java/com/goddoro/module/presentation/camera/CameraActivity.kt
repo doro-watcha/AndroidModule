@@ -1,16 +1,21 @@
 package com.goddoro.module.presentation.camera
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.util.Size
 import android.view.LayoutInflater
+import android.view.Surface
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.camera.core.*
+import androidx.camera.core.impl.VideoCaptureConfig
+import androidx.camera.core.impl.utils.executor.CameraXExecutors
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -22,12 +27,15 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import kotlin.math.roundToInt
 
 typealias LumaListener = (luma: Double) -> Unit
 
 class CameraActivity : AppCompatActivity() {
 
-    private var imageCapture: ImageCapture? = null
+    private lateinit var imageCapture: ImageCapture
+    private lateinit var videoRecorder : VideoCapture
+    private lateinit var videoRecordOptions : VideoCapture.OutputFileOptions
 
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
@@ -52,6 +60,8 @@ class CameraActivity : AppCompatActivity() {
         outputDirectory = getOutputDirectory()
 
         mBinding.cameraCaptureButton.setOnClickListener { takePhoto() }
+        mBinding.cameraRecordButton.setOnClickListener{ startRecord() }
+        mBinding.cameraStopButton.setOnClickListener { stopRecord() }
 
         cameraExecutor = Executors.newSingleThreadExecutor()
     }
@@ -90,7 +100,42 @@ class CameraActivity : AppCompatActivity() {
             })
 
     }
+    @SuppressLint("RestrictedApi")
+    private fun startRecord () {
 
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.RECORD_AUDIO
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        videoRecorder.startRecording(
+            videoRecordOptions,
+            CameraXExecutors.mainThreadExecutor(),
+            object : VideoCapture.OnVideoSavedCallback {
+
+                override fun onVideoSaved(outputFileResults: VideoCapture.OutputFileResults) {
+                    Toast.makeText(this@CameraActivity,"SAVE COMPLETED",Toast.LENGTH_SHORT).show()
+                }
+
+                override fun onError(videoCaptureError: Int, message: String, cause: Throwable?) {
+                    Toast.makeText(this@CameraActivity,message,Toast.LENGTH_SHORT).show()
+                }
+            })
+
+    }
+    @SuppressLint("RestrictedApi")
+    private fun stopRecord() {
+        videoRecorder.stopRecording()
+    }
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -121,6 +166,8 @@ class CameraActivity : AppCompatActivity() {
         ContextCompat.checkSelfPermission(
             baseContext, it) == PackageManager.PERMISSION_GRANTED
     }
+
+    @SuppressLint("RestrictedApi")
     private fun startCamera() {
 
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
@@ -139,6 +186,18 @@ class CameraActivity : AppCompatActivity() {
             imageCapture = ImageCapture.Builder()
                 .build()
 
+            videoRecorder = VideoCapture
+                .Builder()
+                .setTargetRotation(Surface.ROTATION_0)
+                .setVideoFrameRate(15)
+                .setMaxResolution(Size(1080,720))
+                .setTargetAspectRatio(AspectRatio.RATIO_16_9)
+                .setBitRate((2.0*1024*1024).roundToInt())
+                .build()
+
+            videoRecordOptions = VideoCapture.OutputFileOptions.Builder(outputDirectory).build()
+
+
             val imageAnalyzer = ImageAnalysis.Builder()
                 .build()
                 .also {
@@ -156,7 +215,7 @@ class CameraActivity : AppCompatActivity() {
 
                 // Bind use cases to camera
                 cameraProvider.bindToLifecycle(
-                    this, cameraSelector, preview, imageCapture, imageAnalyzer)
+                    this, cameraSelector, preview, imageCapture,videoRecorder)
 
             } catch(exc: Exception) {
                 Log.e(TAG, "Use case binding failed", exc)
@@ -196,6 +255,6 @@ class CameraActivity : AppCompatActivity() {
         private val TAG = CameraActivity::class.java.simpleName
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
         private const val REQUEST_CODE_PERMISSIONS = 10
-        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA,Manifest.permission.RECORD_AUDIO)
     }
 }
