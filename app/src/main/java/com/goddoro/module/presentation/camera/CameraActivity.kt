@@ -33,6 +33,8 @@ typealias LumaListener = (luma: Double) -> Unit
 
 class CameraActivity : AppCompatActivity() {
 
+    private var currentCameraSelector : CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+
     private lateinit var imageCapture: ImageCapture
     private lateinit var videoRecorder : VideoCapture
     private lateinit var videoRecordOptions : VideoCapture.OutputFileOptions
@@ -50,7 +52,7 @@ class CameraActivity : AppCompatActivity() {
 
         // Request camera permissions
         if (allPermissionsGranted()) {
-            startCamera()
+            startCamera(currentCameraSelector)
         } else {
             ActivityCompat.requestPermissions(
                 this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
@@ -62,6 +64,7 @@ class CameraActivity : AppCompatActivity() {
         mBinding.cameraCaptureButton.setOnClickListener { takePhoto() }
         mBinding.cameraRecordButton.setOnClickListener{ startRecord() }
         mBinding.cameraStopButton.setOnClickListener { stopRecord() }
+        mBinding.btnSwitch.setOnClickListener { switchCamera() }
 
         cameraExecutor = Executors.newSingleThreadExecutor()
     }
@@ -138,6 +141,17 @@ class CameraActivity : AppCompatActivity() {
     private fun stopRecord() {
         videoRecorder.stopRecording()
     }
+
+    private fun switchCamera () {
+        currentCameraSelector = if ( currentCameraSelector == CameraSelector.DEFAULT_FRONT_CAMERA){
+            CameraSelector.DEFAULT_BACK_CAMERA
+        } else {
+            CameraSelector.DEFAULT_FRONT_CAMERA
+        }
+        startCamera(currentCameraSelector)
+
+
+    }
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -146,7 +160,7 @@ class CameraActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_CODE_PERMISSIONS) {
             if (allPermissionsGranted()) {
-                startCamera()
+                startCamera(currentCameraSelector)
             } else {
                 Toast.makeText(this,
                     "Permissions not granted by the user.",
@@ -170,7 +184,7 @@ class CameraActivity : AppCompatActivity() {
     }
 
     @SuppressLint("RestrictedApi")
-    private fun startCamera() {
+    private fun startCamera( cameraSelector: CameraSelector ) {
 
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
@@ -202,8 +216,6 @@ class CameraActivity : AppCompatActivity() {
                     })
                 }
 
-            // Select back camera as a default
-            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
             try {
                 // Unbind use cases before rebinding
