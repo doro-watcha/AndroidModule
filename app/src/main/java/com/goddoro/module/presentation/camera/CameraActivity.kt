@@ -127,6 +127,8 @@ class CameraActivity : AppCompatActivity() {
                 }
 
                 override fun onError(videoCaptureError: Int, message: String, cause: Throwable?) {
+                    Log.d(TAG,videoCaptureError.toString())
+                    Log.d(TAG,cause.toString())
                     Toast.makeText(this@CameraActivity,message,Toast.LENGTH_SHORT).show()
                 }
             })
@@ -186,16 +188,10 @@ class CameraActivity : AppCompatActivity() {
             imageCapture = ImageCapture.Builder()
                 .build()
 
-            videoRecorder = VideoCapture
-                .Builder()
-                .setTargetRotation(Surface.ROTATION_0)
-                .setVideoFrameRate(15)
-                .setMaxResolution(Size(1080,720))
-                .setTargetAspectRatio(AspectRatio.RATIO_16_9)
-                .setBitRate((2.0*1024*1024).roundToInt())
+            videoRecorder = VideoCapture.Builder()
                 .build()
 
-            videoRecordOptions = VideoCapture.OutputFileOptions.Builder(outputDirectory).build()
+            videoRecordOptions = VideoCapture.OutputFileOptions.Builder(File(outputDirectory.absolutePath + File.separator + "output2.mp4")).build()
 
 
             val imageAnalyzer = ImageAnalysis.Builder()
@@ -215,7 +211,7 @@ class CameraActivity : AppCompatActivity() {
 
                 // Bind use cases to camera
                 cameraProvider.bindToLifecycle(
-                    this, cameraSelector, preview, imageCapture,videoRecorder)
+                    this, cameraSelector, preview, videoRecorder,imageCapture)
 
             } catch(exc: Exception) {
                 Log.e(TAG, "Use case binding failed", exc)
