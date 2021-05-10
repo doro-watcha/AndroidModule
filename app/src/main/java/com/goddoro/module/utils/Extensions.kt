@@ -61,3 +61,4 @@ inline fun <reified T> Fragment.startActivity(clazz: KClass<out T>, flags: Int? 
     }
     startActivity(intent)
 }
+

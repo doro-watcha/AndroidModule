@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import com.goddoro.module.databinding.ActivityMainBinding
 import com.goddoro.module.presentation.camera.CameraActivity
+import com.goddoro.module.presentation.login.LoginActivity
 import com.goddoro.module.utils.startActivity
 
 class MainActivity : AppCompatActivity() {
@@ -31,6 +32,9 @@ class MainActivity : AppCompatActivity() {
 
             btnCamera.setOnClickListener {
                 startActivity(CameraActivity::class)
+            }
+            btnLogin.setOnClickListener {
+                startActivity(LoginActivity::class)
             }
         }
     }
