@@ -1,10 +1,7 @@
 package com.goddoro.module.application
 
 import android.app.Application
-import com.goddoro.module.di.module.apiModule
-import com.goddoro.module.di.module.networkModule
-import com.goddoro.module.di.module.repositoryModule
-import com.goddoro.module.di.module.viewModelModule
+import com.goddoro.module.di.module.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -34,6 +31,7 @@ class MyApplication : Application() {
                     networkModule,
                     apiModule,
                     repositoryModule
+                    //roomModule
 
                 )
             )

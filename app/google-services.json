@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "717004604388",
+    "project_id": "androidmodule-b6ee4",
+    "storage_bucket": "androidmodule-b6ee4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:717004604388:android:7aa54c87399911ee577df1",
+        "android_client_info": {
+          "package_name": "com.goddoro.module"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "717004604388-d4ejgpee1mk8p06toe28t8tapov0m196.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuE6DA1Mvhn37QcJm6MRxyCvkKy0i79VQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "717004604388-d4ejgpee1mk8p06toe28t8tapov0m196.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

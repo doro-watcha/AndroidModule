@@ -21,11 +21,17 @@
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
-        android:theme="@style/Theme.Module">
-        <activity android:name=".presentation.login.LoginActivity"></activity>
+        android:theme="@style/Theme.Module"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".presentation.retry.RetryActivity"
+            android:label="@string/title_activity_retry"
+            android:theme="@style/Theme.Module.NoActionBar"></activity>
+        <activity android:name=".presentation.mlkit.MlkitActivity" />
+        <activity android:name=".presentation.login.LoginActivity" />
         <activity android:name=".presentation.recyclerview.RecyclerViewActivity" />
         <activity android:name=".presentation.camera.CameraActivity" />
         <activity
@@ -38,6 +44,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="com.google.firebase.ml.vision.DEPENDENCIES"
+            android:value="ocr" />
     </application>
 
 </manifest>

@@ -11,6 +11,7 @@ import android.util.Log
 import android.util.Size
 import android.view.LayoutInflater
 import android.view.Surface
+import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.camera.core.*
@@ -21,6 +22,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.goddoro.module.R
 import com.goddoro.module.databinding.ActivityCameraBinding
+import com.goddoro.module.presentation.mlkit.DoroAnalyzer
+import com.goddoro.module.utils.Broadcast
+import com.goddoro.module.utils.disposedBy
+import io.reactivex.disposables.CompositeDisposable
 import java.io.File
 import java.nio.ByteBuffer
 import java.text.SimpleDateFormat
@@ -32,6 +37,8 @@ import kotlin.math.roundToInt
 typealias LumaListener = (luma: Double) -> Unit
 
 class CameraActivity : AppCompatActivity() {
+
+    private val compositeDisposable = CompositeDisposable()
 
     private var currentCameraSelector : CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
@@ -67,6 +74,8 @@ class CameraActivity : AppCompatActivity() {
         mBinding.btnSwitch.setOnClickListener { switchCamera() }
 
         cameraExecutor = Executors.newSingleThreadExecutor()
+
+        setupBroadcast()
     }
 
     private fun takePhoto() {
@@ -77,9 +86,7 @@ class CameraActivity : AppCompatActivity() {
         // Create time-stamped output file to hold the image
         Log.d(TAG,outputDirectory.toString())
         val photoFile = File(
-            outputDirectory.absolutePath,
-            SimpleDateFormat(FILENAME_FORMAT, Locale.US
-            ).format(System.currentTimeMillis()) + ".jpg")
+            outputDirectory.absolutePath,  "good.jpg")
         Log.d(TAG,photoFile.toString())
 
         // Create output options object which contains file + metadata
@@ -209,11 +216,11 @@ class CameraActivity : AppCompatActivity() {
 
 
             val imageAnalyzer = ImageAnalysis.Builder()
+                .setTargetResolution(Size(1280, 720))
+                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                 .build()
                 .also {
-                    it.setAnalyzer(cameraExecutor, LuminosityAnalyzer { luma ->
-                        Log.d(TAG, "Average luminosity: $luma")
-                    })
+                    it.setAnalyzer(cameraExecutor, DoroAnalyzer() )
                 }
 
 
@@ -223,13 +230,23 @@ class CameraActivity : AppCompatActivity() {
 
                 // Bind use cases to camera
                 cameraProvider.bindToLifecycle(
-                    this, cameraSelector, preview, videoRecorder,imageCapture)
+                    this, cameraSelector, preview, imageCapture)
 
             } catch(exc: Exception) {
                 Log.e(TAG, "Use case binding failed", exc)
             }
 
         }, ContextCompat.getMainExecutor(this))
+    }
+
+    private fun setupBroadcast() {
+
+        Broadcast.apply {
+
+            cardFindBroadcast.subscribe{
+                mBinding.txtFind.visibility= View.VISIBLE
+            }.disposedBy(compositeDisposable)
+        }
     }
 
     override fun onDestroy() {

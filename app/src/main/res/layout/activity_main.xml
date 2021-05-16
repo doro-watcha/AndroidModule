@@ -23,6 +23,13 @@
             android:text="로그인 기능"
             app:layout_constraintTop_toBottomOf="@id/btn_camera"/>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_ml_kit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ML Kit"
+            app:layout_constraintTop_toBottomOf="@+id/btn_login"/>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
