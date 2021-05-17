@@ -1,22 +1,18 @@
 package com.goddoro.module.presentation.animation
 
-import android.animation.ValueAnimator
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.animation.LinearInterpolator
-import android.widget.ProgressBar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.app.NotificationCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.goddoro.module.R
 import com.goddoro.module.databinding.ActivityAnimationBinding
-import com.goddoro.module.presentation.retry.RetryBindingAdapter
 import com.goddoro.module.utils.component.GridSpacingItemDecoration
 import com.goddoro.module.utils.debugE
 import com.goddoro.module.utils.disposedBy
@@ -50,6 +46,7 @@ class AnimationActivity : AppCompatActivity() {
         initButton()
         setupRecyclerView()
         initLottie()
+        initTextView()
     }
 
     private fun initView() {
@@ -132,6 +129,18 @@ class AnimationActivity : AppCompatActivity() {
                 playAnimation()
             }
         }
+    }
+
+    private fun initTextView() {
+
+        val text = arrayOf(
+            "이동호", "이종민",
+            "김혜연", "김태현", "장성원",
+            "JunctionX", "GDM"
+        )
+
+
+        mBinding.txtFading.setTexts(text)
     }
 
 
