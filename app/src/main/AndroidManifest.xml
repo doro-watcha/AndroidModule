@@ -26,9 +26,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Module"
         android:usesCleartextTraffic="true">
-        <activity android:name=".presentation.service.PlayerActivity"></activity>
+        <activity android:name=".presentation.animation.AnimationDetailActivity"></activity>
+        <activity android:name=".presentation.service.PlayerActivity" />
 
-        <service android:name=".presentation.service.PlayerService"></service>
+        <service android:name=".presentation.service.PlayerService" />
 
         <activity android:name=".presentation.animation.AnimationActivity" />
         <activity

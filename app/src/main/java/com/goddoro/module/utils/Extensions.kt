@@ -3,6 +3,7 @@ package com.goddoro.module.utils
 import androidx.fragment.app.Fragment
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
@@ -11,6 +12,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
+import com.goddoro.module.BuildConfig
 import kotlin.reflect.KClass
 
 
@@ -73,3 +75,13 @@ fun ImageView.setImageUri( uri : String) {
     Glide.with(context).load(imageUri).into(this)
 }
 
+
+
+fun debugE(tag: String, message: Any?) {
+    if (BuildConfig.DEBUG)
+        Log.e(tag, "🧩" + message.toString() + "🧩")
+}
+
+fun debugE(message: Any?) {
+    debugE("DEBUG", message)
+}
