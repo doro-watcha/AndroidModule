@@ -13,13 +13,13 @@ import io.reactivex.Single
 interface ImageDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertUploadRequest(item: ImageItem): Single<Long>
+    fun insertImage(item: ImageItem): Single<Long>
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    fun updateUploadRequest(item: ImageItem): Completable
+    fun updateImage(item: ImageItem): Completable
 
     @Delete
-    fun deleteUploadRequest(vararg item: ImageItem): Completable
+    fun deleteImage(vararg item: ImageItem): Completable
 
     @Query("SELECT * FROM ImageItem ORDER BY updateTimeMs DESC")
     fun listImages(): Single<List<ImageItem>>

@@ -2,10 +2,15 @@ package com.goddoro.module.utils
 
 import androidx.fragment.app.Fragment
 import android.content.Intent
+import android.net.Uri
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
+import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
 import kotlin.reflect.KClass
 
 
@@ -60,5 +65,11 @@ inline fun <reified T> Fragment.startActivity(clazz: KClass<out T>, flags: Int? 
         flags?.let { this.flags = it }
     }
     startActivity(intent)
+}
+
+@BindingAdapter("imageUri")
+fun ImageView.setImageUri( uri : String) {
+    val imageUri = uri.toUri()
+    Glide.with(context).load(imageUri).into(this)
 }
 

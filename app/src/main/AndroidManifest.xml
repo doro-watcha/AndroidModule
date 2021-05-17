@@ -26,10 +26,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Module"
         android:usesCleartextTraffic="true">
+        <activity android:name=".presentation.animation.AnimationActivity"></activity>
         <activity
             android:name=".presentation.retry.RetryActivity"
             android:label="@string/title_activity_retry"
-            android:theme="@style/Theme.Module.NoActionBar"></activity>
+            android:theme="@style/Theme.Module.NoActionBar" />
         <activity android:name=".presentation.mlkit.MlkitActivity" />
         <activity android:name=".presentation.login.LoginActivity" />
         <activity android:name=".presentation.recyclerview.RecyclerViewActivity" />

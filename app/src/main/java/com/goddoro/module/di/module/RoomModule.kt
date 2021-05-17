@@ -12,7 +12,7 @@ import org.koin.dsl.module
 
 val roomModule = module {
     single{
-        Room.databaseBuilder(get(), ImageDatabase::class.java, "i01")
+        Room.databaseBuilder(get(), ImageDatabase::class.java, "i03")
             .allowMainThreadQueries()
             .build()
     } bind ImageDatabase::class

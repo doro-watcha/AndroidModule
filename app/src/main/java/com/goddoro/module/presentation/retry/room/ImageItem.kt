@@ -1,14 +1,20 @@
 package com.goddoro.module.presentation.retry.room
 
 import android.content.Context
+import android.net.Uri
 import android.os.Parcelable
+import android.util.Log
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import androidx.work.*
 import com.goddoro.module.presentation.retry.workManager.UploadWorker
+import com.goddoro.module.utils.addSchedulers
+import com.goddoro.module.utils.disposedBy
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.Expose
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import kotlinx.android.parcel.Parcelize
 import org.koin.core.KoinComponent
 import org.koin.core.get
@@ -40,6 +46,10 @@ data class ImageItem(
 
 
 ) : Parcelable, KoinComponent {
+
+
+
+
 
     /** [WorkManager]에 json 형태로 [UploadRequest]를 전달하기 위해 만들어 둔 gson 객체*/
     @Ignore
@@ -90,10 +100,45 @@ data class ImageItem(
 
     }
 
+    private fun insertDatabase() : Disposable {
+        val imageDao = get<ImageDao>()
+
+
+        return imageDao.insertImage(this@ImageItem)
+            .addSchedulers()
+            .subscribe({
+                Log.d(TAG,"Image Insert Success")
+                this@ImageItem.id = it.toInt()
+
+            },{
+                Log.d(TAG, "Image Insert Fail")
+            })
+
+
+    }
+
+    private fun updateDatabase() {
+
+
+
+    }
+
     companion object {
 
 
         const val DATA_IMAGE_UPLOAD_JSON = "DATA_IMAGE_UPLOAD_JSON"
+        private val TAG = ImageItem::class.java.simpleName
+
+        fun generateNewImage ( uri : Uri) : ImageItem {
+
+            val image = ImageItem(
+                imagePath = uri.toString()
+            )
+
+            image.insertDatabase()
+
+            return image
+        }
     }
 
 

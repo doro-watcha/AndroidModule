@@ -1,6 +1,7 @@
 package com.goddoro.module.presentation.retry
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.goddoro.module.presentation.retry.room.ImageDao
@@ -19,11 +20,14 @@ class RetryViewModel (
     val imageDao : ImageDao
 ) : ViewModel() {
 
+
+    lateinit var imageItem : ImageItem
     private val TAG = RetryViewModel::class.java.simpleName
     private val compositeDisposable = CompositeDisposable()
 
     val images : MutableLiveData<List<ImageItem>> = MutableLiveData()
 
+    val onLoadCompleted : MutableLiveData<Once<Unit>> = MutableLiveData()
     val errorInvoked : MutableLiveData<Once<Throwable>> = MutableLiveData()
 
     init {
@@ -32,11 +36,15 @@ class RetryViewModel (
     }
 
     private fun listImages() {
+        Log.d(TAG, "LIST IMAGES")
         imageDao.listImages()
             .addSchedulers()
             .subscribe({
                 images.value = it
+                onLoadCompleted.value = Once(Unit)
+                Log.d(TAG, it.toString())
             },{
+                Log.d(TAG, it.message.toString())
                 errorInvoked.value = Once(it)
             }).disposedBy(compositeDisposable)
 
@@ -46,5 +54,11 @@ class RetryViewModel (
         listImages()
     }
 
+
+    fun sendImage( imageUri : Uri) {
+
+        //imageItem = ImageItem.generateNewImage(imageUri)
+
+    }
 
 }

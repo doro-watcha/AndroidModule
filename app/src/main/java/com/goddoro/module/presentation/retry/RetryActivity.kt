@@ -6,9 +6,12 @@ import android.view.LayoutInflater
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
 import com.goddoro.module.CommonConst.ARG_IMG_URI
 import com.goddoro.module.R
 import com.goddoro.module.databinding.ActivityRetryBinding
+import com.goddoro.module.utils.component.GridSpacingItemDecoration
+import com.goddoro.module.utils.observeOnce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class RetryActivity : AppCompatActivity() {
@@ -31,19 +34,40 @@ class RetryActivity : AppCompatActivity() {
 
 
         initView()
+        setupRecyclerView()
         observeViewModel()
+    }
+
+    private fun setupRecyclerView() {
+
+        val imageLayoutManager = GridLayoutManager(this@RetryActivity,3)
+        val spacingTop = resources.getDimension(R.dimen.paddingItemDecoration4).toInt()
+        val spacingLeft = resources.getDimension(R.dimen.paddingItemDecoration4).toInt()
+
+        val gridSpacing = GridSpacingItemDecoration(3,spacingLeft,spacingTop,0)
+
+        mBinding.imageRecyclerView.apply {
+
+            layoutManager = imageLayoutManager
+            addItemDecoration(gridSpacing)
+            adapter = RetryBindingAdapter()
+        }
     }
 
     private fun initView() {
         imageUri = intent.getParcelableExtra(ARG_IMG_URI)!!
         mBinding.imgCaptured.setImageURI(imageUri)
 
+        mViewModel.sendImage(imageUri)
     }
 
     private fun observeViewModel() {
 
         mViewModel.apply {
 
+            onLoadCompleted.observeOnce(this@RetryActivity){
+                mBinding.imageRecyclerView.adapter?.notifyDataSetChanged()
+            }
 
 
         }
