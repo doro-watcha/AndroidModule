@@ -35,7 +35,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Animation"
-            app:layout_constraintTop_toBottomOf="@id/btn_animation"/>
+            app:layout_constraintTop_toBottomOf="@id/btn_ml_kit"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_player"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Player Activity"
+            app:layout_constraintTop_toBottomOf="@+id/btn_animation"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

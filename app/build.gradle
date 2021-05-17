@@ -106,11 +106,10 @@ dependencies {
     implementation "androidx.work:work-rxjava2:" + work_manager_version
 
     //Exo Player
-    def exo_player_version = "2.11.2"
-    implementation "com.google.android.exoplayer:exoplayer-core:2.11.2"
+    def exo_player_version = "2.13.3"
+    implementation "com.google.android.exoplayer:exoplayer-core:" + exo_player_version
 
     implementation "com.google.android.exoplayer:exoplayer-dash:" + exo_player_version
-
     implementation "com.google.android.exoplayer:exoplayer-ui:" + exo_player_version
 
 

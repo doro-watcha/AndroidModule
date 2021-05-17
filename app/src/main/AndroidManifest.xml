@@ -26,7 +26,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Module"
         android:usesCleartextTraffic="true">
-        <activity android:name=".presentation.animation.AnimationActivity"></activity>
+        <activity android:name=".presentation.service.PlayerActivity"></activity>
+
+        <service android:name=".presentation.service.PlayerService"></service>
+
+        <activity android:name=".presentation.animation.AnimationActivity" />
         <activity
             android:name=".presentation.retry.RetryActivity"
             android:label="@string/title_activity_retry"
