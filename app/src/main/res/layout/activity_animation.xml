@@ -2,6 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+    
+    <data>
+        <variable
+            name="vm"
+            type="com.goddoro.module.presentation.animation.AnimationViewModel" />
+        
+    </data>
 
 
     <ScrollView
@@ -107,7 +114,22 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/ripple" />
+            
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app_recyclerview_images="@{vm.images}"
+                app:layout_constraintTop_toBottomOf="@+id/state_list_button"/>
 
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottie"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:lottie_rawRes="@raw/check_animation"
+                app:layout_constraintTop_toBottomOf="@+id/recyclerview"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
