@@ -2,6 +2,7 @@ package com.goddoro.module.presentation.camera
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
@@ -20,11 +21,14 @@ import androidx.camera.core.impl.utils.executor.CameraXExecutors
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.goddoro.module.CommonConst.ARG_IMG_URI
 import com.goddoro.module.R
 import com.goddoro.module.databinding.ActivityCameraBinding
 import com.goddoro.module.presentation.mlkit.DoroAnalyzer
+import com.goddoro.module.presentation.retry.RetryActivity
 import com.goddoro.module.utils.Broadcast
 import com.goddoro.module.utils.disposedBy
+import com.goddoro.module.utils.startActivity
 import io.reactivex.disposables.CompositeDisposable
 import java.io.File
 import java.nio.ByteBuffer
@@ -104,6 +108,11 @@ class CameraActivity : AppCompatActivity() {
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     val savedUri = Uri.fromFile(photoFile)
                     val msg = "Photo capture succeeded: $savedUri"
+
+                    val intent = Intent ( this@CameraActivity , RetryActivity::class.java)
+
+                    intent.putExtra(ARG_IMG_URI,savedUri)
+
                     Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
                     Log.d(TAG, msg)
                 }

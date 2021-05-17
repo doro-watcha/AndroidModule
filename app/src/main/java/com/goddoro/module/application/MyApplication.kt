@@ -30,8 +30,9 @@ class MyApplication : Application() {
                     viewModelModule,
                     networkModule,
                     apiModule,
-                    repositoryModule
-                    //roomModule
+                    repositoryModule,
+                    roomModule,
+                    utilModule
 
                 )
             )
