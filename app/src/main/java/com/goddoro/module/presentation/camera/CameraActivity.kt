@@ -113,6 +113,9 @@ class CameraActivity : AppCompatActivity() {
 
                     intent.putExtra(ARG_IMG_URI,savedUri)
 
+
+                    startActivity(intent)
+
                     Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
                     Log.d(TAG, msg)
                 }

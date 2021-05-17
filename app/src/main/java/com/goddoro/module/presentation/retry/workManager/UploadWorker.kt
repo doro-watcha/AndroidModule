@@ -26,7 +26,7 @@ class UploadWorker(context: Context, params: WorkerParameters) : RxWorker(contex
 
     override fun createWork(): Single<Result> {
 
-        val json = inputData.getString(ImageItem.DATA_UPLOAD_REQUEST_JSON)!!
+        val json = inputData.getString(ImageItem.DATA_IMAGE_UPLOAD_JSON)!!
 
         val gson = GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()
 

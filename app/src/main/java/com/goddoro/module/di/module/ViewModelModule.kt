@@ -14,5 +14,5 @@ val viewModelModule = module {
 
 
     viewModel { LoginViewModel(get()) }
-    viewModel { RetryViewModel() }
+    viewModel { RetryViewModel(get()) }
 }
