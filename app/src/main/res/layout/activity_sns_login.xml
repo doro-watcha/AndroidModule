@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.snsLogin.SnsLoginActivity">
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/login_google"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/material_button_height"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/white"
+            android:drawableLeft="@drawable/ic_google"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:text="구글로 로그인하기"
+            app:layout_constraintTop_toTopOf="parent"
+
+            app:cornerRadius="6dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/login_facebook"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/material_button_height"
+            android:backgroundTint="@color/facebook_blue"
+            android:drawableLeft="@drawable/ic_facebook"
+            android:gravity="center"
+            android:text="페이스북으로 로그인하"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@+id/login_google"
+            app:cornerRadius="6dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/login_kakao"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/material_button_height"
+            android:backgroundTint="@color/primaryYellow"
+            android:gravity="center"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@+id/login_facebook"
+            android:drawableLeft="@drawable/ic_kakaotalk"
+            android:text="카카오로 로그인하기"
+            app:cornerRadius="6dp" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

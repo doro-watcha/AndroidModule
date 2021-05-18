@@ -1,4 +1,5 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="paddingItemDecoration4">4dp</dimen>
+    <dimen name="material_button_height">60dp</dimen>
 </resources>

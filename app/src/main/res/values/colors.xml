@@ -11,4 +11,8 @@
     <color name="colorAccent">#00F2B2</color>
     <color name="colorAccentTranslucent">#9900F2B2</color>
     <color name="colorBackground">#202020</color>
+
+    <color name="primaryYellow">#FFD600</color>
+
+    <color name="facebook_blue">#3a5daa</color>
 </resources>
