@@ -10,4 +10,6 @@ import io.reactivex.subjects.PublishSubject
 object Broadcast {
 
     val cardFindBroadcast : PublishSubject<Unit> = PublishSubject.create()
+
+    val profileUpdateSuccess : PublishSubject<Unit> = PublishSubject.create()
 }

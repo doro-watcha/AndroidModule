@@ -12,4 +12,7 @@
     <string name="title_activity_retry">RetryActivity</string>
     <string name="channel_name">Channel Name</string>
     <string name="channel_description">Channel Description</string>
+
+    <string name="txt_profile_update">프로필 사진을 업데이트 하시겠습니까?</string>
+    <string name="txt_update">업데이트</string>
 </resources>

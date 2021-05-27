@@ -43,7 +43,7 @@ class RetryViewModel (
                 images.value = it
                 onLoadCompleted.value = Once(Unit)
                 Log.d(TAG, it.toString())
-            },{
+            }, {
                 Log.d(TAG, it.message.toString())
                 errorInvoked.value = Once(it)
             }).disposedBy(compositeDisposable)
@@ -55,10 +55,23 @@ class RetryViewModel (
     }
 
 
-    fun sendImage( imageUri : Uri) {
+    fun insertImage(imageUri: Uri) {
 
-        //imageItem = ImageItem.generateNewImage(imageUri)
+        imageItem = ImageItem.generateNewImage(imageUri)
 
+        imageDao.insertImage(imageItem)
+            .addSchedulers()
+            .subscribe({
+                refresh()
+            }, {
+                errorInvoked.value = Once(it)
+            }).disposedBy(compositeDisposable)
+
+
+    }
+
+    fun updateProfileImage(imageItem: ImageItem) {
+        imageItem.startUpload()
     }
 
 }

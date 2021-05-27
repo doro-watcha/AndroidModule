@@ -8,12 +8,12 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
+import androidx.lifecycle.*
 import com.bumptech.glide.Glide
 import com.goddoro.module.BuildConfig
+import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KClass
+import kotlin.reflect.KProperty
 
 
 /**
@@ -84,4 +84,23 @@ fun debugE(tag: String, message: Any?) {
 
 fun debugE(message: Any?) {
     debugE("DEBUG", message)
+}
+
+class AutoClearedValue<T : Any> : ReadWriteProperty<Fragment, T>, LifecycleObserver {
+    private var _value: T? = null
+
+    override fun getValue(thisRef: Fragment, property: KProperty<*>): T =
+        _value
+            ?: throw IllegalStateException("Trying to call an auto-cleared value outside of the view lifecycle.")
+
+    override fun setValue(thisRef: Fragment, property: KProperty<*>, value: T) {
+        thisRef.viewLifecycleOwner.lifecycle.removeObserver(this)
+        _value = value
+        thisRef.viewLifecycleOwner.lifecycle.addObserver(this)
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    fun onDestroy() {
+        _value = null
+    }
 }

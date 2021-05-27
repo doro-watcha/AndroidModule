@@ -9,10 +9,12 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import androidx.work.*
 import com.goddoro.module.presentation.retry.workManager.UploadWorker
+import com.goddoro.module.utils.Once
 import com.goddoro.module.utils.addSchedulers
 import com.goddoro.module.utils.disposedBy
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.Expose
+import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import kotlinx.android.parcel.Parcelize
@@ -100,27 +102,24 @@ data class ImageItem(
 
     }
 
-    private fun insertDatabase() : Disposable {
+
+
+    fun updateProfileImage( ) : Completable {
+
         val imageDao = get<ImageDao>()
 
-
-        return imageDao.insertImage(this@ImageItem)
-            .addSchedulers()
-            .subscribe({
-                Log.d(TAG,"Image Insert Success")
-                this@ImageItem.id = it.toInt()
-
-            },{
-                Log.d(TAG, "Image Insert Fail")
-            })
+        return Completable.create { emitter ->
 
 
-    }
+            imageDao.deleteImage(this)
+                .addSchedulers()
+                .subscribe({
+                    emitter.onComplete()
+                },{
+                    emitter.onError(it)
+                })
 
-    private fun updateDatabase() {
-
-
-
+        }
     }
 
     companion object {
@@ -134,8 +133,6 @@ data class ImageItem(
             val image = ImageItem(
                 imagePath = uri.toString()
             )
-
-            image.insertDatabase()
 
             return image
         }

@@ -8,12 +8,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.goddoro.module.databinding.ItemImageBinding
 import androidx.databinding.library.baseAdapters.BR
 import com.goddoro.module.presentation.retry.room.ImageItem
+import com.goddoro.module.utils.setOnDebounceClickListener
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 
 /**
  * Created by goddoro on 2021-05-17.
  */
 
 class RetryBindingAdapter : RecyclerView.Adapter<RetryBindingAdapter.RetryViewHolder>(){
+
+    private val onClick : PublishSubject<ImageItem> = PublishSubject.create()
+    val clickItem : Observable<ImageItem> = onClick
+
 
 
     var items : List<ImageItem> = listOf()
@@ -42,6 +49,9 @@ class RetryBindingAdapter : RecyclerView.Adapter<RetryBindingAdapter.RetryViewHo
 
         init {
 
+            binding.root.setOnDebounceClickListener {
+                onClick.onNext(items[layoutPosition])
+            }
 
         }
 

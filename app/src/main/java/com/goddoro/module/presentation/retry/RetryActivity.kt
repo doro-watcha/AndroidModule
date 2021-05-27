@@ -3,6 +3,7 @@ package com.goddoro.module.presentation.retry
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.widget.Toast
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
@@ -10,11 +11,19 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.goddoro.module.CommonConst.ARG_IMG_URI
 import com.goddoro.module.R
 import com.goddoro.module.databinding.ActivityRetryBinding
+import com.goddoro.module.utils.Broadcast
 import com.goddoro.module.utils.component.GridSpacingItemDecoration
+import com.goddoro.module.utils.component.showTextDoubleDialog
+import com.goddoro.module.utils.disposedBy
 import com.goddoro.module.utils.observeOnce
+import io.reactivex.disposables.CompositeDisposable
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class RetryActivity : AppCompatActivity() {
+
+    private val TAG = RetryActivity::class.java.simpleName
+
+    private val compositeDisposable = CompositeDisposable()
 
     private lateinit var mBinding : ActivityRetryBinding
 
@@ -36,6 +45,9 @@ class RetryActivity : AppCompatActivity() {
         initView()
         setupRecyclerView()
         observeViewModel()
+
+        setupBroadcast()
+        setupSwipeRefreshLayout()
     }
 
     private fun setupRecyclerView() {
@@ -50,15 +62,24 @@ class RetryActivity : AppCompatActivity() {
 
             layoutManager = imageLayoutManager
             addItemDecoration(gridSpacing)
-            adapter = RetryBindingAdapter()
+            adapter = RetryBindingAdapter().apply {
+
+                clickItem.subscribe{
+                    showTextDoubleDialog(R.string.txt_update,R.string.txt_profile_update, {
+                        mViewModel.updateProfileImage(it)
+                    },{
+
+                    })
+                }.disposedBy(compositeDisposable)
+
+            }
         }
     }
 
     private fun initView() {
         imageUri = intent.getParcelableExtra(ARG_IMG_URI)!!
-        mBinding.imgCaptured.setImageURI(imageUri)
 
-        mViewModel.sendImage(imageUri)
+        mViewModel.insertImage(imageUri)
     }
 
     private fun observeViewModel() {
@@ -67,9 +88,28 @@ class RetryActivity : AppCompatActivity() {
 
             onLoadCompleted.observeOnce(this@RetryActivity){
                 mBinding.imageRecyclerView.adapter?.notifyDataSetChanged()
+
+                if ( mBinding.layoutRefresh.isRefreshing) mBinding.layoutRefresh.isRefreshing = false
             }
 
 
+        }
+    }
+
+    private fun setupSwipeRefreshLayout() {
+        mBinding.layoutRefresh.setOnRefreshListener {
+            mViewModel.refresh()
+        }
+    }
+
+    private fun setupBroadcast() {
+
+        Broadcast.apply {
+
+            profileUpdateSuccess.subscribe{
+                Toast.makeText(this@RetryActivity,"프로필을 성공적으로 업데이트 했습니다",Toast.LENGTH_SHORT).show()
+                mViewModel.refresh()
+            }.disposedBy(compositeDisposable)
         }
     }
 }

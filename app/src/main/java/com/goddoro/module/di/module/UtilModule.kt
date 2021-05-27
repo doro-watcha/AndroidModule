@@ -1,6 +1,7 @@
 package com.goddoro.module.di.module
 
 import com.goddoro.module.utils.MultiPartUtil
+import com.goddoro.module.utils.ScreenUtil
 import com.goddoro.module.utils.UriUtil
 import org.koin.dsl.module
 
@@ -15,4 +16,5 @@ val utilModule = module{
 
     single { UriUtil(get()) }
     single { MultiPartUtil(get()) }
+    single { ScreenUtil(get()) }
 }
