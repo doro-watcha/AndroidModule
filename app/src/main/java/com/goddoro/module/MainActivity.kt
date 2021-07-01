@@ -17,6 +17,7 @@ import com.goddoro.module.presentation.animation.AnimationActivity
 import com.goddoro.module.presentation.camera.CameraActivity
 import com.goddoro.module.presentation.login.LoginActivity
 import com.goddoro.module.presentation.mlkit.MlkitActivity
+import com.goddoro.module.presentation.playerRecyclerView.PlayerRecyclerViewActivity
 import com.goddoro.module.presentation.service.PlayerActivity
 import com.goddoro.module.presentation.service.PlayerService
 import com.goddoro.module.utils.startActivity
@@ -58,6 +59,9 @@ class MainActivity : AppCompatActivity() {
 
             btnPlayer.setOnClickListener {
                 startActivity(PlayerActivity::class)
+            }
+            btnPlayerRecyclerview.setOnClickListener{
+                startActivity(PlayerRecyclerViewActivity::class)
             }
         }
     }
